@@ -2,9 +2,12 @@ import 'package:dio/browser.dart';
 import 'package:dio/dio.dart';
 
 import '../env/env.dart';
+import '../storage/storage.dart';
+import 'interceptors/auth_interceptor.dart';
 
 class CustonDio extends DioForBrowser {
-  CustonDio()
+  late AuthInterceptor _authInterceptor;
+  CustonDio(Storage storage)
       : super(
           BaseOptions(
             baseUrl: Env.instance.get('backend_base_url'),
@@ -20,13 +23,16 @@ class CustonDio extends DioForBrowser {
         responseHeader: true,
       ),
     );
+    _authInterceptor = AuthInterceptor(storage);
   }
 
   CustonDio auth(){
+    interceptors.add(_authInterceptor);
     return this;
   }
 
   CustonDio unauth(){
+    interceptors.remove(_authInterceptor);
     return this;
   }
 
