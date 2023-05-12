@@ -71,6 +71,22 @@ mixin _$PaymentTypeController on PaymentTypeControllerBase, Store {
     return _$loadPaymentsAsyncAction.run(() => super.loadPayments());
   }
 
+  late final _$addPaymentAsyncAction =
+      AsyncAction('PaymentTypeControllerBase.addPayment', context: context);
+
+  @override
+  Future addPayment() {
+    return _$addPaymentAsyncAction.run(() => super.addPayment());
+  }
+
+  late final _$editPaymentAsyncAction =
+      AsyncAction('PaymentTypeControllerBase.editPayment', context: context);
+
+  @override
+  Future editPayment(PaymentTypeModel paymanet) {
+    return _$editPaymentAsyncAction.run(() => super.editPayment(paymanet));
+  }
+
   @override
   String toString() {
     return '''

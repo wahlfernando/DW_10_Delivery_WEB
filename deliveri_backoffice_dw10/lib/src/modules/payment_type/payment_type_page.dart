@@ -40,8 +40,13 @@ class _PaymentTypePageState extends State<PaymentTypePage>
               break;
             case PaymentTypeStatus.error:
               hideLoader();
-              showError(controller.errorMessage ??
-                  'Erro ao buscar formas de pagamento');
+              showError(
+                controller.errorMessage ?? 'Erro ao buscar formas de pagamento',
+              );
+              break;
+            case PaymentTypeStatus.addOrUpdatePayment:
+              hideLoader();
+              shoeAddAlllUpdatePayment();
               break;
           }
         },
@@ -51,6 +56,25 @@ class _PaymentTypePageState extends State<PaymentTypePage>
     });
   }
 
+  void shoeAddAlllUpdatePayment() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Material(
+          color: Colors.black26,
+          child: Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            backgroundColor: Colors.white,
+            elevation: 10,
+            child: Text('Modal X'),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -58,7 +82,7 @@ class _PaymentTypePageState extends State<PaymentTypePage>
       padding: const EdgeInsets.only(left: 40, top: 40, right: 40),
       child: Column(
         children: [
-          const PaymentTypeHeader(),
+          PaymentTypeHeader(controller: controller),
           const SizedBox(
             height: 50,
           ),
@@ -74,7 +98,10 @@ class _PaymentTypePageState extends State<PaymentTypePage>
                 ),
                 itemBuilder: (context, index) {
                   final paymentTypeModel = controller.paymentTypes[index];
-                  return PaymentTypeItem(payment: paymentTypeModel,);
+                  return PaymentTypeItem(
+                    controller: controller,
+                    payment: paymentTypeModel,
+                  );
                 },
               );
             },

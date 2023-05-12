@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/ui/widgets/base_header.dart';
+import '../payment_type_controller.dart';
 
 class PaymentTypeHeader extends StatelessWidget {
-  const PaymentTypeHeader({Key? key}) : super(key: key);
+
+  final PaymentTypeController controller;
+
+  const PaymentTypeHeader({Key? key, required this.controller}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BaseHeader(
       title: 'ADMINISTRAR FORMA DE PAGAMENTO',
       buttonLabel: 'ADICIONAR',
-      buttonPressed: () {},
+      buttonPressed: () {
+        controller.addPayment();
+      },
       filterWidget: DropdownButton<bool?>(
         value: null,
         items: const [
@@ -27,7 +33,9 @@ class PaymentTypeHeader extends StatelessWidget {
             child: Text('Inativos'),
           ),
         ],
-        onChanged: (value) {},
+        onChanged: (value) {
+          
+        },
       ),
     );
   }
