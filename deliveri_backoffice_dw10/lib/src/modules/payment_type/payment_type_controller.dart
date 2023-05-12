@@ -29,15 +29,22 @@ abstract class PaymentTypeControllerBase with Store {
   @readonly
   String? _errorMessage;
 
-  PaymentTypeModel? _paymentTypeSelected;
+  @readonly
+  bool? _filterEnabled; 
+ 
+  @readonly
+  PaymentTypeModel? _paymentTypeSelected; 
 
   PaymentTypeControllerBase(this._paymentTypeRepository);
+
+  @action
+  void changeFilter(bool? enabled) =>  _filterEnabled = enabled;
 
   @action
   Future<void> loadPayments() async {
     try {
       _status = PaymentTypeStatus.loading;
-      _paymentTypes = await _paymentTypeRepository.findAll(null);
+      _paymentTypes = await _paymentTypeRepository.findAll(_filterEnabled);
       _status = PaymentTypeStatus.loaded;
     } catch (e, s) {
       log('Erro ao carregar as formas de pagaento!', error: e, stackTrace: s);
@@ -47,15 +54,15 @@ abstract class PaymentTypeControllerBase with Store {
   }
 
   @action
-  void addPayment() async {
+  Future<void> addPayment() async {
     _status = PaymentTypeStatus.loading;
     await Future.delayed(Duration.zero);
     _paymentTypeSelected = null;
-     _status = PaymentTypeStatus.addOrUpdatePayment;
+     _status = PaymentTypeStatus.addOrUpdatePayment; 
   }
 
   @action
-  void editPayment(PaymentTypeModel paymanet) async {
+  Future<void> editPayment(PaymentTypeModel paymanet) async {
     _status = PaymentTypeStatus.loading;
     await Future.delayed(Duration.zero);
     _paymentTypeSelected = paymanet;
