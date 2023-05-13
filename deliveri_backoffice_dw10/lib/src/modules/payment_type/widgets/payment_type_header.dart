@@ -45,7 +45,7 @@ class _PaymentTypeHeaderState extends State<PaymentTypeHeader> {
         onChanged: (value) {
           setState(() {
             enabled = value;
-            //widget.controller.changeFilter(enabled);
+            widget.controller.changeFilter(enabled);
           });
         },
       ),
