@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/env/env.dart';
+import '../../../../core/extensions/format_extensions.dart';
 import '../../../../core/ui/styles/text_styles.dart';
+import '../../../../models/product_model.dart';
 
 class ProductItem extends StatelessWidget {
-  const ProductItem({super.key});
+  final ProductModel product;
+  const ProductItem({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
@@ -26,17 +29,23 @@ class ProductItem extends StatelessWidget {
                     topRight: Radius.circular(20),
                   ),
                   image: DecorationImage(
-                      image: NetworkImage(
-                        '${Env.instance.get('backend_base_url')}/storage/mclumygt_jrs_1682022574279.jpg',
-                      ),
-                      fit: BoxFit.cover),
+                    image: NetworkImage(
+                      '${Env.instance.get('backend_base_url')}${product.image}',
+                    ),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(15),
-                child: Text(
-                  'X-tudao',
-                  style: context.textStyles.textMedium,
+                padding: const EdgeInsets.all(15), 
+                child: Tooltip(
+                  message: product.name,
+                  child: Text(
+                    product.name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: context.textStyles.textMedium,
+                  ),
                 ),
               ),
               Row(
@@ -44,10 +53,12 @@ class ProductItem extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(15),
-                    child: Text('R\$ 100'),
+                    child: Text(product.price.currencyPTBR),
                   ),
-                  TextButton(onPressed: (){}, child: const Text('Editar'))
-
+                  TextButton(
+                    onPressed: () {},
+                    child: const Text('Editar'),
+                  )
                 ],
               )
             ],
