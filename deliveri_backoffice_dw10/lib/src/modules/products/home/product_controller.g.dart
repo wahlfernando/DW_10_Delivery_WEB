@@ -63,6 +63,24 @@ mixin _$ProductController on ProductControllerBase, Store {
     });
   }
 
+  late final _$_producSelectedAtom =
+      Atom(name: 'ProductControllerBase._producSelected', context: context);
+
+  ProductModel? get producSelected {
+    _$_producSelectedAtom.reportRead();
+    return super._producSelected;
+  }
+
+  @override
+  ProductModel? get _producSelected => producSelected;
+
+  @override
+  set _producSelected(ProductModel? value) {
+    _$_producSelectedAtom.reportWrite(value, super._producSelected, () {
+      super._producSelected = value;
+    });
+  }
+
   late final _$loadProductsAsyncAction =
       AsyncAction('ProductControllerBase.loadProducts', context: context);
 

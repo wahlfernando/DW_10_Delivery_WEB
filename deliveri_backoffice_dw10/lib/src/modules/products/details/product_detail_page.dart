@@ -52,6 +52,10 @@ class _ProductDetailPageState extends State<ProductDetailPage>
             showLoader();
             break;
           case ProductDetailStateStatus.loaded:
+            final model = controller.productModel!;
+            nameEC.text = model.name;
+            priceEC.text = model.price.currencyPTBR;
+            descriptionEC.text = model.description;
             hideLoader();
             break;
           case ProductDetailStateStatus.error:
@@ -59,24 +63,27 @@ class _ProductDetailPageState extends State<ProductDetailPage>
             showError(controller.errorMessage ?? '');
             break;
           case ProductDetailStateStatus.errorLoadProduct:
-            break;
-          case ProductDetailStateStatus.deleted:
+            hideLoader();
+            showError('Erro ao carregar o produto para elteração');
+            Navigator.of(context).pop();
             break;
           case ProductDetailStateStatus.upload:
             hideLoader();
             break;
+          case ProductDetailStateStatus.deleted:
           case ProductDetailStateStatus.saved:
             hideLoader();
             Navigator.pop(context);
             break;
         }
       });
+      controller.loadProduct(widget.productId);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final witchButtonAction = context.percentWidth(.4);
+    final witchButtonAction = context.percentWidth(.5);
 
     return Container(
       color: Colors.grey[50],
@@ -206,23 +213,75 @@ class _ProductDetailPageState extends State<ProductDetailPage>
                     children: [
                       Container(
                         padding: const EdgeInsets.all(5),
-                        width: witchButtonAction / 2,
+                        width: witchButtonAction / 3,
                         height: 60,
-                        child: OutlinedButton(
-                          onPressed: () {},
-                          style: OutlinedButton.styleFrom(
-                            side: const BorderSide(color: Colors.red),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.grey,
                           ),
+                          onPressed: () => Navigator.pop(context),
                           child: Text(
-                            'Deletar',
-                            style: context.textStyles.textBold
-                                .copyWith(color: Colors.red),
+                            'Cancelar',
+                            style: context.textStyles.textBold,
+                          ),
+                        ),
+                      ),
+                      Visibility(
+                        visible: widget.productId != null,
+                        child: Container(
+                          padding: const EdgeInsets.all(5),
+                          width: witchButtonAction / 3,
+                          height: 60,
+                          child: OutlinedButton(
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: const Text('Confirmar'),
+                                    content: Text(
+                                      'Confirmar a exclusão do produto ${controller.productModel!.name}?',
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () => Navigator.pop(context),
+                                        child: Text(
+                                          'Cancelar',
+                                          style: context.textStyles.textBold
+                                              .copyWith(
+                                            color: Colors.red,
+                                          ),
+                                        ),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                          controller.deleteProduct();
+                                        },
+                                        child: Text(
+                                          'Confirmar',
+                                          style: context.textStyles.textBold,
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
+                            style: OutlinedButton.styleFrom(
+                              side: const BorderSide(color: Colors.red),
+                            ),
+                            child: Text(
+                              'Deletar',
+                              style: context.textStyles.textBold
+                                  .copyWith(color: Colors.red),
+                            ),
                           ),
                         ),
                       ),
                       Container(
                         padding: const EdgeInsets.all(5),
-                        width: witchButtonAction / 2,
+                        width: witchButtonAction / 3,
                         height: 60,
                         child: ElevatedButton(
                           onPressed: () {

@@ -11,6 +11,7 @@ enum ProductStateStatus {
   loading,
   loaded,
   error,
+  addOrUpdateProduct,
 }
 
 class ProductController = ProductControllerBase with _$ProductController;
@@ -29,6 +30,9 @@ abstract class ProductControllerBase with Store {
   @readonly
   String? _filterName;
 
+  @readonly
+  ProductModel? _producSelected;
+
   @action
   Future<void> loadProducts() async {
     try {
@@ -41,8 +45,22 @@ abstract class ProductControllerBase with Store {
     }
   }
 
-  Future<void> filterByName(String name) async{
+  Future<void> filterByName(String name) async {
     _filterName = name;
     await loadProducts();
+  }
+
+  Future<void> addProduct() async {
+    _status = ProductStateStatus.loading;
+    await Future.delayed(Duration.zero);
+    _producSelected = null;
+    _status = ProductStateStatus.addOrUpdateProduct;
+  }
+
+  Future<void> editProduct(ProductModel productModel) async {
+    _status = ProductStateStatus.loading;
+    await Future.delayed(Duration.zero);
+    _producSelected = productModel;
+    _status = ProductStateStatus.addOrUpdateProduct;
   }
 }

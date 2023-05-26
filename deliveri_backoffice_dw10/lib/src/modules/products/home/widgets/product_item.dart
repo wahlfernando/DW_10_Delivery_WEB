@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
 import '../../../../core/env/env.dart';
 import '../../../../core/extensions/format_extensions.dart';
 import '../../../../core/ui/styles/text_styles.dart';
 import '../../../../models/product_model.dart';
+import '../product_controller.dart';
 
 class ProductItem extends StatelessWidget {
   final ProductModel product;
@@ -56,7 +58,9 @@ class ProductItem extends StatelessWidget {
                     child: Text(product.price.currencyPTBR),
                   ),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      context.read<ProductController>().editProduct(product);
+                    },
                     child: const Text('Editar'),
                   )
                 ],
