@@ -26,14 +26,16 @@ class CustonDio extends DioForBrowser {
     _authInterceptor = AuthInterceptor(storage);
   }
 
-  CustonDio auth(){
-    interceptors.add(_authInterceptor);
+  CustonDio auth() {
+    if (!interceptors.contains(_authInterceptor)) {
+      interceptors.add(_authInterceptor);
+    }
+
     return this;
   }
 
-  CustonDio unauth(){
+  CustonDio unauth() {
     interceptors.remove(_authInterceptor);
     return this;
   }
-
 }

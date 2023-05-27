@@ -1,3 +1,4 @@
+import 'detail/order_detailModal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -38,10 +39,31 @@ class _OrderPageState extends State<OrderPage> with Loader, Messages {
             hideLoader();
             showError(controller.errorMessage ?? 'Erro interno');
             break;
+          case OrderStateStatus.showDetailModal:
+            hideLoader();
+            showOrderDetail();
+            break;
+          case OrderStateStatus.statusChange:
+            hideLoader();
+            Navigator.of(context, rootNavigator: true).pop();
+            controller.findOrders();
+            break;
         }
       });
       controller.findOrders();
     });
+  }
+
+  void showOrderDetail() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return OrderDetailModal(
+          controller: controller,
+          order: controller.orderSelected!,
+        );
+      },
+    );
   }
 
   @override
@@ -58,7 +80,7 @@ class _OrderPageState extends State<OrderPage> with Loader, Messages {
           padding: const EdgeInsets.only(top: 40),
           child: Column(
             children: [
-              const OrderHeader(),
+              OrderHeader(controller: controller,),
               Expanded(
                 child: Observer(
                   builder: (_) {

@@ -29,7 +29,7 @@ class PaymentTypeRepositoryImpl implements PaymentTypeRepository {
   }
 
   @override
-  Future<PaymentTypeModel> findById(int id) async {
+  Future<PaymentTypeModel> getById(int id) async {
     try {
       final paymentResult = await _dio.auth().get(
             '/payment-types/$id',
